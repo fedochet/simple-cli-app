@@ -1,21 +1,25 @@
 package ru.spbau.cliapp.task;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static ru.spbau.cliapp.task.TestUtil.createInput;
 
-class CatTest {
+public class CatTest {
+
+    @Rule
+    public TemporaryFolder tmpFolder = new TemporaryFolder();
 
     private Cat cat = new Cat();
 
     @Test
-    void cat_prints_from_stdin_to_stdout_when_no_args() {
+    public void cat_prints_from_stdin_to_stdout_when_no_args() {
         String original = "hello, world!";
         InputStream input = createInput(original);
         OutputStream output = new ByteArrayOutputStream();
@@ -25,4 +29,16 @@ class CatTest {
         assertEquals(original, output.toString());
     }
 
+    @Test
+    public void cat_with_arguments_opens_file_and_prints_it_adding_last_newline() throws IOException {
+        File file = tmpFolder.newFile("file.txt");
+        String expectedString = "expected string\nwith enters\n\nand stuff\n";
+        Files.write(file.toPath(), expectedString.getBytes());
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        cat.main(createInput(""), output,
+            Collections.singletonList(file.getAbsolutePath()));
+
+        assertEquals(expectedString + "\n", output.toString());
+    }
 }

@@ -3,6 +3,9 @@ package ru.spbau.cliapp.task;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Cat implements Task {
@@ -18,6 +21,17 @@ public class Cat implements Task {
                 }
             } catch (IOException e) {
                 return 1;
+            }
+        } else {
+            for (String fileName : args) {
+                try {
+                    Path path = Paths.get(fileName);
+                    byte[] bytes = Files.readAllBytes(path);
+                    stdout.write(bytes);
+                    stdout.write("\n".getBytes());
+                } catch (IOException ignored) {
+
+                }
             }
         }
 
