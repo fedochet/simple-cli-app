@@ -3,6 +3,7 @@ package ru.spbau.cliapp.task;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 final public class ShellProcess {
     private final Task task;
@@ -11,7 +12,7 @@ final public class ShellProcess {
         this.task = task;
     }
 
-    public int execute(InputStream stdin, OutputStream stdout, String[] args) {
+    public int execute(InputStream stdin, OutputStream stdout, List<String> args) {
         int exitCode = task.main(stdin, stdout, args);
         try {
             stdout.close();
