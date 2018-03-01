@@ -30,7 +30,6 @@ public class Cat implements Task {
                     stdout.write(bytes);
                     stdout.write("\n".getBytes());
                 } catch (IOException ignored) {
-
                 }
             }
         }
