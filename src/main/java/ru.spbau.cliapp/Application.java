@@ -13,7 +13,7 @@ public class Application {
         Pipe pipe = new SystemPipe();
         Echo echo = new Echo();
         Cat cat = new Cat();
-        new ShellProcess(echo).execute(System.in, pipe.getOutputStream(), new String[]{"hello", "world"});
-        new ShellProcess(cat).execute(pipe.getInputStream(), System.out, new String[]{});
+        ShellProcess.createProcess(echo).execute(System.in, pipe.getOutputStream(), new String[]{"hello", "world"});
+        ShellProcess.createProcess(cat).execute(pipe.getInputStream(), System.out, new String[]{});
     }
 }

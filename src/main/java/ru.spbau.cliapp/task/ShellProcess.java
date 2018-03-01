@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ShellProcess {
+final public class ShellProcess {
     private final Task task;
 
-    public ShellProcess(Task task) {
+    private ShellProcess(Task task) {
         this.task = task;
     }
 
@@ -19,6 +19,9 @@ public class ShellProcess {
             throw new RuntimeException("Cannot close output stream", e);
         }
         return exitCode;
+    }
 
+    public static ShellProcess createProcess(Task task) {
+        return new ShellProcess(task);
     }
 }
