@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public abstract class AbstractTask implements Task {
+public abstract class AbstractTask implements Process {
     @Override
     public int execute(InputStream stdin, OutputStream stdout, String[] args) {
         int exitCode = main(stdin, stdout, args);

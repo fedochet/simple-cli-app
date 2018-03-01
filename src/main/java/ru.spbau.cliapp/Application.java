@@ -9,11 +9,10 @@ import java.io.IOException;
 
 public class Application {
     public static void main(String[] args) throws IOException {
-        try (Pipe pipe = new SystemPipe()) {
-            Echo echo = new Echo();
-            Cat cat = new Cat();
-            echo.execute(System.in, pipe.getOutputStream(), new String[]{"hello", "world"});
-            cat.execute(pipe.getInputStream(), System.out, new String[]{});
-        }
+        Pipe pipe = new SystemPipe();
+        Echo echo = new Echo();
+        Cat cat = new Cat();
+        echo.execute(System.in, pipe.getOutputStream(), new String[]{"hello", "world"});
+        cat.execute(pipe.getInputStream(), System.out, new String[]{});
     }
 }
