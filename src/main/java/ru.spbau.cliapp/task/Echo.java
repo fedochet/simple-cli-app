@@ -6,7 +6,18 @@ import java.io.OutputStream;
 
 public class Echo implements Task {
     @Override
-    public int main(InputStream stdin, OutputStream stdout, String[] args) {
+    public int execute(InputStream stdin, OutputStream stdout, String[] args) {
+        int exitCode = main(stdin, stdout, args);
+        try {
+            stdout.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot close output stream", e);
+        }
+        return exitCode;
+
+    }
+
+    private int main(InputStream stdin, OutputStream stdout, String[] args) {
         try {
             for (String arg : args) {
                 stdout.write(arg.getBytes());

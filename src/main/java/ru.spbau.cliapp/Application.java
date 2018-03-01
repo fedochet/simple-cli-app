@@ -12,9 +12,8 @@ public class Application {
         try (Pipe pipe = new SystemPipe()) {
             Echo echo = new Echo();
             Cat cat = new Cat();
-            echo.main(System.in, pipe.getOutputStream(), new String[]{"hello", "world"});
-            pipe.getOutputStream().close();
-            cat.main(pipe.getInputStream(), System.out, new String[]{});
+            echo.execute(System.in, pipe.getOutputStream(), new String[]{"hello", "world"});
+            cat.execute(pipe.getInputStream(), System.out, new String[]{});
         }
     }
 }

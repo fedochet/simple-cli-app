@@ -4,5 +4,5 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface Task {
-    int main(InputStream stdin, OutputStream stdout, String[] args);
+    int execute(InputStream stdin, OutputStream stdout, String[] args);
 }
