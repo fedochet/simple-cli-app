@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public abstract class AbstractTask implements Process {
-    @Override
+public class ShellProcess {
+    private final Task task;
+
+    public ShellProcess(Task task) {
+        this.task = task;
+    }
+
     public int execute(InputStream stdin, OutputStream stdout, String[] args) {
-        int exitCode = main(stdin, stdout, args);
+        int exitCode = task.main(stdin, stdout, args);
         try {
             stdout.close();
         } catch (IOException e) {
@@ -16,6 +21,4 @@ public abstract class AbstractTask implements Process {
         return exitCode;
 
     }
-
-    protected abstract int main(InputStream stdin, OutputStream stdout, String[] args);
 }

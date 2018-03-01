@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Cat extends AbstractTask {
+public class Cat implements Task {
 
-    protected int main(InputStream stdin, OutputStream stdout, String[] args) {
+    @Override
+    public int main(InputStream stdin, OutputStream stdout, String[] args) {
         if (args.length == 0) {
             int size;
             byte[] bytes = new byte[1024];

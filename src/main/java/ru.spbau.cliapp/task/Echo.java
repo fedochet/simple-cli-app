@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Echo extends AbstractTask {
+public class Echo implements Task {
 
     @Override
-    protected int main(InputStream stdin, OutputStream stdout, String[] args) {
+    public int main(InputStream stdin, OutputStream stdout, String[] args) {
         try {
             for (String arg : args) {
                 stdout.write(arg.getBytes());
