@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 public interface Task {
+    @Deprecated
     int main(InputStream stdin, OutputStream stdout, List<String> args);
 
     default int main(ProcessContext context, List<String> args) {

@@ -7,10 +7,10 @@ import ru.spbau.cliapp.core.BasicProcessContext;
 import ru.spbau.cliapp.core.ProcessContext;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static ru.spbau.cliapp.task.TestUtil.createFileWithText;
 import static ru.spbau.cliapp.task.TestUtil.createInput;
 
 public class CatTest {
@@ -33,14 +33,14 @@ public class CatTest {
 
     @Test
     public void cat_with_arguments_opens_file_and_prints_it_adding_last_newline() throws IOException {
-        File file = tmpFolder.newFile("file.txt");
         String expectedString = "expected string\nwith enters\n\nand stuff\n";
-        Files.write(file.toPath(), expectedString.getBytes());
+        File file = createFileWithText(tmpFolder, expectedString);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        ProcessContext processContext = new BasicProcessContext(file.getParentFile().toPath(), createInput(""), output, null);
+        ProcessContext processContext = new BasicProcessContext(file.toPath().getParent(), createInput(""), output, null);
 
         cat.main(processContext, Collections.singletonList(file.getName()));
 
         assertEquals(expectedString + "\n", output.toString());
     }
+
 }
