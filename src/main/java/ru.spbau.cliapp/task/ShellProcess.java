@@ -1,8 +1,8 @@
 package ru.spbau.cliapp.task;
 
+import ru.spbau.cliapp.core.ProcessContext;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 final public class ShellProcess {
@@ -12,10 +12,10 @@ final public class ShellProcess {
         this.task = task;
     }
 
-    public int execute(InputStream stdin, OutputStream stdout, List<String> args) {
-        int exitCode = task.main(stdin, stdout, args);
+    public int execute(ProcessContext context, List<String> args) {
+        int exitCode = task.main(context, args);
         try {
-            stdout.close();
+            context.getStdout().close();
         } catch (IOException e) {
             throw new RuntimeException("Cannot close output stream", e);
         }
