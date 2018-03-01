@@ -8,7 +8,6 @@ import ru.spbau.cliapp.task.Task;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +21,9 @@ public class Application {
 
         Workflow workflow = new Workflow(
             namedTasks, Arrays.asList(
-                new TaskInfo("echo", Arrays.asList("hello")),
-                new TaskInfo("cat", Collections.emptyList()),
-                new TaskInfo("cat", Collections.emptyList())
+                new TaskInfo("echo", Arrays.asList("hello", "world")),
+                new TaskInfo("cat"),
+                new TaskInfo("cat")
             )
         );
 
