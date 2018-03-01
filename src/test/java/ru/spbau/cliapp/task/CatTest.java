@@ -3,6 +3,8 @@ package ru.spbau.cliapp.task;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import ru.spbau.cliapp.core.BasicProcessContext;
+import ru.spbau.cliapp.core.ProcessContext;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -35,9 +37,9 @@ public class CatTest {
         String expectedString = "expected string\nwith enters\n\nand stuff\n";
         Files.write(file.toPath(), expectedString.getBytes());
         ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ProcessContext processContext = new BasicProcessContext(file.getParentFile().toPath(), createInput(""), output, null);
 
-        cat.main(createInput(""), output,
-            Collections.singletonList(file.getAbsolutePath()));
+        cat.main(processContext, Collections.singletonList(file.getName()));
 
         assertEquals(expectedString + "\n", output.toString());
     }

@@ -1,23 +1,30 @@
 package ru.spbau.cliapp.task;
 
+import ru.spbau.cliapp.core.BasicProcessContext;
+import ru.spbau.cliapp.core.ProcessContext;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class Cat implements Task {
 
     @Override
     public int main(InputStream stdin, OutputStream stdout, List<String> args) {
+        return main(new BasicProcessContext(null, stdin, stdout, stdout), args);
+    }
+
+    @Override
+    public int main(ProcessContext context, List<String> args) {
         if (args.isEmpty()) {
             int size;
             byte[] bytes = new byte[1024];
             try {
-                while ((size = stdin.read(bytes)) != -1) {
-                    stdout.write(bytes, 0, size);
+                while ((size = context.getStdin().read(bytes)) != -1) {
+                    context.getStdout().write(bytes, 0, size);
                 }
             } catch (IOException e) {
                 return 1;
@@ -25,10 +32,10 @@ public class Cat implements Task {
         } else {
             for (String fileName : args) {
                 try {
-                    Path path = Paths.get(fileName);
+                    Path path = context.getWorkingDir().resolve(fileName);
                     byte[] bytes = Files.readAllBytes(path);
-                    stdout.write(bytes);
-                    stdout.write("\n".getBytes());
+                    context.getStdout().write(bytes);
+                    context.getStdout().write("\n".getBytes());
                 } catch (IOException ignored) {
                 }
             }
