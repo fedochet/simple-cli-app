@@ -11,7 +11,7 @@ version '1.0-SNAPSHOT'
 
 jar {
     manifest {
-//        attributes 'Main-Class': 'ru.spbau.cliapp.ApplicationKt'
+        attributes 'Main-Class': 'ru.spbau.cliapp.Application'
     }
 
     // this is to put all deps inside generated jar
