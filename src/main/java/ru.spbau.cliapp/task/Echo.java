@@ -14,6 +14,7 @@ public class Echo implements Task {
                 stdout.write(arg.getBytes());
                 stdout.write(" ".getBytes());
             }
+            stdout.write("\n".getBytes());
         } catch (IOException e) {
             return 1;
         }

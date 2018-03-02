@@ -3,15 +3,12 @@ package ru.spbau.cliapp;
 import ru.spbau.cliapp.interpreter.Interpreter;
 import ru.spbau.cliapp.task.*;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Application {
-    public static void main(String[] args) throws IOException {
-
-
+    public static void main(String[] args) {
         Map<String, Task> taskRegistry = new HashMap<>();
         taskRegistry.put("cat", new Cat());
         taskRegistry.put("echo", new Echo());
