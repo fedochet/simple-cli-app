@@ -1,8 +1,8 @@
 package ru.spbau.cliapp.parsing
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
+import org.junit.jupiter.api.Test
 
 class TokenizerTest {
     val tokenizer = Tokenizer()
@@ -36,5 +36,18 @@ class TokenizerTest {
     @Test
     fun `double quotes string is found`() {
         assertEquals(listOf(DoubleQuotesToken("echo")), tokenizer.tokenize("\"echo\""))
+    }
+
+    @Test
+    fun `pipe symbol is recognized`() {
+        assertEquals(listOf(VerticalBar), tokenizer.tokenize("|"))
+    }
+
+    @Test
+    fun `pipe is recognised with other things`() {
+        assertEquals(
+                listOf(StringToken("echo"), DoubleQuotesToken("hello world"), VerticalBar, StringToken("cat"), SingleQuotesToken("-v")),
+                tokenizer.tokenize("echo \"hello world\" | cat '-v'")
+        )
     }
 }

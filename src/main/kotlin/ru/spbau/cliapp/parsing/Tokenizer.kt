@@ -4,9 +4,10 @@ sealed class Token
 data class StringToken(val value: String) : Token()
 data class DoubleQuotesToken(val value: String) : Token()
 data class SingleQuotesToken(val value: String) : Token()
+object VerticalBar : Token()
 
 class Tokenizer {
-    val splitRegex = Regex("('[^']*')|(\"[^\"]*\")|([^'\"]+)")
+    val splitRegex = Regex("('[^']*')|(\"[^\"]*\")|(\\|)|([^'\"|]+)")
     val singleQuotesRegex = Regex("'[^']*'")
     val doubleQuotesRegex = Regex("\"[^\"]*\"")
 
@@ -27,6 +28,7 @@ class Tokenizer {
     private fun selectToken(token: String) = when {
         singleQuotesRegex matches token -> SingleQuotesToken(token.removeSurrounding("\'"))
         doubleQuotesRegex matches token -> DoubleQuotesToken(token.removeSurrounding("\""))
+        token == "|" -> VerticalBar
         else -> StringToken(token)
     }
 
