@@ -50,4 +50,27 @@ class TokenizerTest {
                         SingleQuotesToken("-v")
                 )
     }
+
+    @Test
+    fun `pipes are recognised even when standing close to words`() {
+        assertThat(tokenizer.tokenize("echo|cat|hello||"))
+                .containsExactly(
+                        StringToken("echo"),
+                        VerticalBar,
+                        StringToken("cat"),
+                        VerticalBar,
+                        StringToken("hello"),
+                        VerticalBar,
+                        VerticalBar
+                )
+    }
+
+    @Test
+    fun `pipes are not extracted from quoted tokens`() {
+        assertThat(tokenizer.tokenize("'echo|pipe' \"double|quoted\""))
+                .containsExactly(
+                        SingleQuotesToken("echo|pipe"),
+                        DoubleQuotesToken("double|quoted")
+                )
+    }
 }
