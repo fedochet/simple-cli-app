@@ -54,6 +54,7 @@ dependencies {
         exclude group: 'org.junit.platform'
         exclude group: 'org.jetbrains.kotlin'
     }
+    testCompile 'org.assertj:assertj-core:3.9.0'
 
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
 
