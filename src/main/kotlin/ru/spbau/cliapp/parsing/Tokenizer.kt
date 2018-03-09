@@ -2,13 +2,15 @@ package ru.spbau.cliapp.parsing
 
 /**
  * This is a base class for all possible tokens.
+ *
+ * [value] field represents piece of the original string.
  */
-sealed class Token
-data class StringToken(val value: String) : Token()
-data class DoubleQuotesToken(val value: String) : Token()
-data class SingleQuotesToken(val value: String) : Token()
-object VerticalBar : Token()
-object Equals : Token()
+sealed class Token(open val value: String)
+data class StringToken(override val value: String) : Token(value)
+data class DoubleQuotesToken(override val value: String) : Token(value)
+data class SingleQuotesToken(override val value: String) : Token(value)
+object VerticalBar : Token("|")
+object Equals : Token("=")
 
 /**
  * This class splits string into tokens which can be analysed in parser.
