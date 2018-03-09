@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class TokenizerTest {
-    val tokenizer = Tokenizer()
+    val tokenizer = Tokenizer
 
     @Test
     fun `empty string tokenized to empty list`() {
@@ -72,5 +72,10 @@ class TokenizerTest {
                         SingleQuotesToken("echo|pipe"),
                         DoubleQuotesToken("double|quoted")
                 )
+    }
+
+    @Test
+    fun `equals sign is recognised`() {
+        assertThat(tokenizer.tokenize("=")).containsExactly(Equals)
     }
 }

@@ -5,11 +5,17 @@ data class StringToken(val value: String) : Token()
 data class DoubleQuotesToken(val value: String) : Token()
 data class SingleQuotesToken(val value: String) : Token()
 object VerticalBar : Token()
+object Equals : Token()
 
-class Tokenizer {
-    val splitRegex = Regex("('[^']*')|(\"[^\"]*\")|(\\|)|([^'\"|]+)")
-    val singleQuotesRegex = Regex("'[^']*'")
-    val doubleQuotesRegex = Regex("\"[^\"]*\"")
+object Tokenizer {
+    private val singleQuotes = "('[^']*')"
+    private val doubleQuotes = "(\"[^\"]*\")"
+    private val verticalBar = "(\\|)"
+    private val equalsSign = "(=)"
+    private val otherSymbols: String = "([^'\"|=]+)"
+    private val splitRegex = Regex("${singleQuotes}|${doubleQuotes}|${verticalBar}|${equalsSign}|${otherSymbols}")
+    private val singleQuotesRegex = Regex("'[^']*'")
+    private val doubleQuotesRegex = Regex("\"[^\"]*\"")
 
     fun tokenize(s: String): List<Token> {
         return splitRegex.findAll(s)
@@ -29,6 +35,7 @@ class Tokenizer {
         singleQuotesRegex matches token -> SingleQuotesToken(token.removeSurrounding("\'"))
         doubleQuotesRegex matches token -> DoubleQuotesToken(token.removeSurrounding("\""))
         token == "|" -> VerticalBar
+        token == "=" -> Equals
         else -> StringToken(token)
     }
 
