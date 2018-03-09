@@ -23,7 +23,7 @@ public class Workflow {
 
     public void execute(Path workingDir, InputStream stdin, OutputStream stdout, OutputStream stderr) throws IOException {
         List<ShellProcess> processes = tasks.stream()
-            .map(t -> t.taskName)
+            .map(TaskInfo::getTaskName)
             .map(namedTasks::get)
             .map(ShellProcess::createProcess)
             .collect(Collectors.toList());
@@ -48,7 +48,7 @@ public class Workflow {
             InputStream in = inputStreams.get(i);
             OutputStream out = outputStreams.get(i);
             ProcessContext context = new BasicProcessContext(workingDir, in, out, stderr);
-            process.execute(context, task.arguments);
+            process.execute(context, task.getArguments());
         }
     }
 }
