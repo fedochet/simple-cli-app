@@ -1,5 +1,8 @@
 package ru.spbau.cliapp.parsing
 
+/**
+ * This is a base class for all possible tokens.
+ */
 sealed class Token
 data class StringToken(val value: String) : Token()
 data class DoubleQuotesToken(val value: String) : Token()
@@ -7,6 +10,11 @@ data class SingleQuotesToken(val value: String) : Token()
 object VerticalBar : Token()
 object Equals : Token()
 
+/**
+ * This class splits string into tokens which can be analysed in parser.
+ *
+ * It is not supposed to perform any kind of substitution (like "$x" -> "echo").
+ */
 object Tokenizer {
     private val singleQuotes = "('[^']*')"
     private val doubleQuotes = "(\"[^\"]*\")"
