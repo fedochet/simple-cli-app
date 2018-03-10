@@ -19,16 +19,18 @@ object TaskInfoParser {
     fun parse(tokens: List<Token>): List<TaskInfo> {
         if (tokens.isEmpty()) return emptyList()
 
-        return splitByPipes(tokens).map { TaskInfo(it.first().value, it.tail().map { it.value }) }
+        return tokens
+                .splitOn { it == VerticalBar }
+                .map { TaskInfo(it.first().value, it.tail().map { it.value }) }
     }
 
-    private fun splitByPipes(tokens: List<Token>): List<List<Token>> {
-        val result = mutableListOf<MutableList<Token>>()
+    private fun <T> List<T>.splitOn(condition: (T) -> Boolean): List<List<T>> {
+        val result = mutableListOf<MutableList<T>>()
         result.add(mutableListOf())
 
-        tokens.forEach {
-            when (it) {
-                VerticalBar -> result.add(mutableListOf())
+        this.forEach {
+            when {
+                condition(it) -> result.add(mutableListOf())
                 else -> result.last().add(it)
             }
         }
