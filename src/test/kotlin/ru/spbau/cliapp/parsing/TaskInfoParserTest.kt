@@ -26,4 +26,25 @@ class TaskInfoParserTest {
         assertThat(parser.parse(tokensInRow))
                 .containsExactly(TaskInfo("command", listOf("arg1", "arg2", "arg3")))
     }
+
+    @Test
+    fun `two string tokens separated by pipe are treated like two commands`() {
+        val twoCommands = listOf(StringToken("cmd1"), VerticalBar, StringToken("cmd2"))
+
+        assertThat(parser.parse(twoCommands)).containsExactly(
+                TaskInfo("cmd1"),
+                TaskInfo("cmd2")
+        )
+    }
+
+    @Test
+    fun `piped commands with arguments are correctly parsed`() {
+        val firstCommand = listOf(StringToken("cmd1"), StringToken("arg1"))
+        val secondCommand = listOf(StringToken("cmd2"), StringToken("arg2"))
+
+        assertThat(parser.parse(firstCommand + VerticalBar + secondCommand)).containsExactly(
+                TaskInfo("cmd1", listOf("arg1")),
+                TaskInfo("cmd2", listOf("arg2"))
+        )
+    }
 }
