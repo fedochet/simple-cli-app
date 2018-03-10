@@ -48,11 +48,10 @@ public class Cat implements Task {
     }
 
     private int printFromStdout(ProcessContext context) {
-        int size;
-        byte[] bytes = new byte[1024];
+        int readByte;
         try {
-            while ((size = context.getStdin().read(bytes)) != -1) {
-                context.getStdout().write(bytes, 0, size);
+            while ((readByte = context.getStdin().read()) != -1) {
+                context.getStdout().write(readByte);
             }
         } catch (IOException e) {
             return 1;
