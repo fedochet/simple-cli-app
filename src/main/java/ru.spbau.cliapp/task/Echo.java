@@ -11,8 +11,8 @@ public class Echo implements Task {
     @Override
     public int main(InputStream stdin, OutputStream stdout, List<String> args) {
         try {
-            stdout.write(args.stream().collect(Collectors.joining(" ")).concat("\n").getBytes());
-            stdout.write("\n".getBytes());
+            String result = args.stream().collect(Collectors.joining(" ")).concat("\n");
+            stdout.write(result.getBytes());
         } catch (IOException e) {
             return 1;
         }
