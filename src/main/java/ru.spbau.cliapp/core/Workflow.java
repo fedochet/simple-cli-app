@@ -2,6 +2,7 @@ package ru.spbau.cliapp.core;
 
 import ru.spbau.cliapp.task.ShellProcess;
 import ru.spbau.cliapp.task.Task;
+import ru.spbau.cliapp.util.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,11 +17,16 @@ public class Workflow {
     private final List<TaskInfo> tasks;
     private final Map<String, Task> namedTasks;
 
-    public Workflow(Map<String, Task> namedTasks, List<TaskInfo> tasksToRun) {
+    public Workflow(Map<String, Task> taskRegistry, List<TaskInfo> tasksToRun) {
         this.tasks = tasksToRun;
-        this.namedTasks = namedTasks;
+        this.namedTasks = taskRegistry;
     }
 
+    /**
+     * Connects tasks in workflow with pipes and invokes them sequentially.
+     *
+     * Does not close any of the passed streams.
+     */
     public void execute(Path workingDir, InputStream stdin, OutputStream stdout, OutputStream stderr) throws IOException {
         List<ShellProcess> processes = tasks.stream()
             .map(TaskInfo::getTaskName)
@@ -34,13 +40,13 @@ public class Workflow {
         }
 
         List<InputStream> inputStreams = new ArrayList<>();
-        inputStreams.add(stdin);
+        inputStreams.add(IOUtil.ignoringClose(stdin));
         inputStreams.addAll(pipes.stream().map(Pipe::getInputStream).collect(Collectors.toList()));
 
         List<OutputStream> outputStreams = pipes.stream()
             .map(Pipe::getOutputStream)
             .collect(Collectors.toCollection(ArrayList::new));
-        outputStreams.add(stdout);
+        outputStreams.add(IOUtil.ignoringClose(stdout));
 
         for (int i = 0; i < processes.size(); i++) {
             ShellProcess process = processes.get(i);
