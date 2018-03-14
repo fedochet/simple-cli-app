@@ -3,8 +3,6 @@ package ru.spbau.cliapp.task;
 import ru.spbau.cliapp.core.ProcessContext;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 public class Pwd implements Task {
@@ -19,8 +17,4 @@ public class Pwd implements Task {
         return 0;
     }
 
-    @Override
-    public int main(InputStream stdin, OutputStream stdout, List<String> args) {
-        return 0;
-    }
 }

@@ -1,7 +1,6 @@
 package ru.spbau.cliapp.task;
 
 import ru.spbau.cliapp.core.ProcessContext;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,10 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Wc implements Task {
-    @Override
-    public int main(InputStream stdin, OutputStream stdout, List<String> args) {
-        throw new NotImplementedException();
-    }
 
     @Override
     public int main(ProcessContext context, List<String> args) {

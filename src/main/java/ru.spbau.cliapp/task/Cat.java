@@ -1,21 +1,13 @@
 package ru.spbau.cliapp.task;
 
-import ru.spbau.cliapp.core.BasicProcessContext;
 import ru.spbau.cliapp.core.ProcessContext;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
 public class Cat implements Task {
-
-    @Override
-    public int main(InputStream stdin, OutputStream stdout, List<String> args) {
-        return main(new BasicProcessContext(null, stdin, stdout, stdout), args);
-    }
 
     @Override
     public int main(ProcessContext context, List<String> args) {

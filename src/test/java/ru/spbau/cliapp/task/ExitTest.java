@@ -10,6 +10,6 @@ class ExitTest {
     void exit_command_throws_StopInterpreterException() {
         Exit exit = new Exit();
         Assertions.assertThrows(StopInterpreterException.class,
-            () -> exit.main(null, null, null));
+            () -> exit.main(null, null));
     }
 }

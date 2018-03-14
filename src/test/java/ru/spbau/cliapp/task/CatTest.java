@@ -25,8 +25,9 @@ public class CatTest {
         String original = "hello, world!";
         InputStream input = createInput(original);
         OutputStream output = new ByteArrayOutputStream();
+        ProcessContext processContext = new BasicProcessContext(null, input, output, null);
 
-        cat.main(input, output, Collections.emptyList());
+        cat.main(processContext, Collections.emptyList());
 
         assertEquals(original, output.toString());
     }
