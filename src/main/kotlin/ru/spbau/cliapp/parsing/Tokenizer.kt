@@ -30,14 +30,14 @@ object Tokenizer {
     fun tokenize(s: String): List<Token> {
         return splitRegex.findAll(s)
                 .map { it.value }
-                .filter { it.isNotBlank() }
                 .map { selectToken(it) }
-                .flatMap { parseNonQuotes(it) }
+                .flatMap { splitNonQuotedTokens(it) }
+                .filter { it.value.isNotBlank() }
                 .toList()
     }
 
-    private fun parseNonQuotes(it: Token) = when (it) {
-        is StringToken -> it.value.split(" ").filter { it.isNotBlank() }.map { StringToken(it) }.asSequence()
+    private fun splitNonQuotedTokens(it: Token) = when (it) {
+        is StringToken -> it.value.split(" ").map { StringToken(it) }.asSequence()
         else -> sequenceOf(it)
     }
 
