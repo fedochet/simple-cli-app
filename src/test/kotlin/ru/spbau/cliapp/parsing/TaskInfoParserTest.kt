@@ -2,6 +2,7 @@ package ru.spbau.cliapp.parsing
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import ru.spbau.cliapp.core.TaskInfo
 
 class TaskInfoParserTest {
@@ -46,5 +47,12 @@ class TaskInfoParserTest {
                 TaskInfo("cmd1", listOf("arg1")),
                 TaskInfo("cmd2", listOf("arg2"))
         )
+    }
+
+    @Test
+    fun `parser throws exception on two pipes in the row`() {
+        assertThrows<IllegalAccessException> {
+            parser.parse(listOf(VerticalBar, VerticalBar))
+        }
     }
 }

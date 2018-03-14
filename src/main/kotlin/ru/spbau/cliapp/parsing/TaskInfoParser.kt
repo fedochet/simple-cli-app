@@ -15,14 +15,26 @@ object TaskInfoParser {
 
     /**
      * Takes list of tokens, groups them by pipe symbols (`|`) and then transforms them into TaskInfos.
+     *
+     * @throws IllegalArgumentException if there are two pipe symbols standing together (like in `"hello | | there"`)
      */
     fun parse(tokens: List<Token>): List<TaskInfo> {
         if (tokens.isEmpty()) return emptyList()
 
-        return tokens
-                .splitOn { it == VerticalBar }
-                .map { TaskInfo(it.first().value, it.tail().map { it.value }) }
+        val splittedByPipes = tokens.splitOn { it == VerticalBar }
+        return assertNoEmptyTasks(splittedByPipes)
+                .map { formTaskInfo(it) }
     }
+
+    private fun assertNoEmptyTasks(splittedByPipes: List<List<Token>>): List<List<Token>> {
+        if (splittedByPipes.none { it.isEmpty() }) {
+            return splittedByPipes
+        }
+
+        throw IllegalAccessException("Two pipes are standing together!")
+    }
+
+    private fun formTaskInfo(it: List<Token>) = TaskInfo(it.first().value, it.tail().map { it.value })
 
     private fun <T> List<T>.splitOn(condition: (T) -> Boolean): List<List<T>> {
         val result = mutableListOf<MutableList<T>>()
