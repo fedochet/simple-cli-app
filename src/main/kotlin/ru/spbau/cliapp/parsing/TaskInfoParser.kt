@@ -21,8 +21,8 @@ object TaskInfoParser {
     fun parse(tokens: List<Token>): List<TaskInfo> {
         if (tokens.isEmpty()) return emptyList()
 
-        val splittedByPipes = tokens.splitOn { it == VerticalBar }
-        return assertNoEmptyTasks(splittedByPipes)
+        val splitByPipes = tokens.splitOn { it == VerticalBar }
+        return assertNoEmptyTasks(splitByPipes)
                 .map { formTaskInfo(it) }
     }
 
