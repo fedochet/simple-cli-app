@@ -31,6 +31,15 @@ public class Interpreter {
         this.parser = parser;
     }
 
+    /**
+     * Starts interpreter and binds it to passed streams. It will stop when EOL will be entered directly into
+     * stdin.
+     *
+     * @param in stdin for shell
+     * @param out stdout for shell
+     * @param err stderr for shell
+     * @throws IOException if anything goes wrong during tasks execution
+     */
     public void run(InputStream in, OutputStream out, OutputStream err) throws IOException {
         Scanner scanner = new Scanner(in);
         PrintStream w = new PrintStream(out);
