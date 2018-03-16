@@ -1,6 +1,8 @@
 package ru.spbau.cliapp;
 
 import ru.spbau.cliapp.interpreter.Interpreter;
+import ru.spbau.cliapp.interpreter.InterpreterParser;
+import ru.spbau.cliapp.parsing.StringInterpolator;
 import ru.spbau.cliapp.parsing.TaskInfoParser;
 import ru.spbau.cliapp.parsing.Tokenizer;
 import ru.spbau.cliapp.task.*;
@@ -22,11 +24,11 @@ public class Application {
     }
 
     public static void main(String[] args) throws IOException {
+        InterpreterParser interpreterParser = new InterpreterParser(Tokenizer.INSTANCE, TaskInfoParser.INSTANCE, StringInterpolator.INSTANCE);
         Interpreter interpreter = new Interpreter(
             Paths.get(""),
             taskRegistry,
-            Tokenizer.INSTANCE,
-            TaskInfoParser.INSTANCE
+            interpreterParser
         );
 
         interpreter.run(System.in, System.out, System.err);
