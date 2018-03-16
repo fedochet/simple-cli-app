@@ -35,10 +35,8 @@ class InterpreterParser(
     }
 
     private fun interpolate(token: Token, env: Map<String, String>) = when (token) {
-        is DoubleQuotesToken, is StringToken -> token.interpolateWith(env)
+        is DoubleQuotesToken -> listOf(DoubleQuotesToken(interpolator.interpolate(token.value, env)))
+        is StringToken -> tokenizer.tokenize(interpolator.interpolate(token.value, env))
         else -> listOf(token)
     }
-
-    private fun Token.interpolateWith(env: Map<String, String>) =
-            tokenizer.tokenize(interpolator.interpolate(this.value, env))
 }

@@ -30,4 +30,22 @@ class InterpreterParserTest {
                         TaskInfo("less", listOf("-f"))
                 )
     }
+
+    @Test
+    fun `expansion is performed in double qouted strings`() {
+        assertThat(parser.parse("echo \"\$hello\"", mapOf("hello" to "world")))
+                .containsExactly(TaskInfo("echo", listOf("world")))
+    }
+
+    @Test
+    fun `no expansion performed in single quoted strings`() {
+        assertThat(parser.parse("echo '\$hello'", mapOf("hello" to "world")))
+                .containsExactly(TaskInfo("echo", listOf("\$hello")))
+    }
+
+    @Test
+    fun `double quoted string is not splitted after expansion`() {
+        assertThat(parser.parse("echo \"one \$hello world\"", mapOf("hello" to "world")))
+                .containsExactly(TaskInfo("echo", listOf("one world world")))
+    }
 }
