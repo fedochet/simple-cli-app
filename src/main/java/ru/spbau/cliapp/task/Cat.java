@@ -30,7 +30,7 @@ public class Cat implements Task {
             } catch (IOException e) {
                 errorCode = 1;
                 try {
-                    context.getErr().write(("Error priniting file " + fileName).getBytes());
+                    context.getErr().write(("Error priniting file " + fileName + "\n").getBytes());
                 } catch (IOException ignored) {
                 }
             }
