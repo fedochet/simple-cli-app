@@ -1,4 +1,4 @@
-package ru.spbau.cliapp
+package ru.spbau.cliapp.interpreter
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

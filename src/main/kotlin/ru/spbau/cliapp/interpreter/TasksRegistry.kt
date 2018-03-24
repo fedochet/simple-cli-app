@@ -1,4 +1,4 @@
-package ru.spbau.cliapp
+package ru.spbau.cliapp.interpreter
 
 import ru.spbau.cliapp.task.Task
 

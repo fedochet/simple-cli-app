@@ -1,6 +1,6 @@
 package ru.spbau.cliapp.core;
 
-import ru.spbau.cliapp.TasksRegistry;
+import ru.spbau.cliapp.interpreter.TasksRegistry;
 import ru.spbau.cliapp.task.ShellProcess;
 import ru.spbau.cliapp.util.IOUtil;
 

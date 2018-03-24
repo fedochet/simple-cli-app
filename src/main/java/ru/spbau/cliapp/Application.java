@@ -2,6 +2,7 @@ package ru.spbau.cliapp;
 
 import ru.spbau.cliapp.interpreter.Interpreter;
 import ru.spbau.cliapp.interpreter.InterpreterParser;
+import ru.spbau.cliapp.interpreter.TasksRegistry;
 import ru.spbau.cliapp.parsing.StringInterpolator;
 import ru.spbau.cliapp.parsing.TaskInfoParser;
 import ru.spbau.cliapp.parsing.Tokenizer;

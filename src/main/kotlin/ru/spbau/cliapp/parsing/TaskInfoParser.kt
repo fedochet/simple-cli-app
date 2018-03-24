@@ -31,7 +31,7 @@ object TaskInfoParser {
             return splittedByPipes
         }
 
-        throw IllegalAccessException("Two pipes are standing together!")
+        throw IllegalArgumentException("Two pipes are standing together!")
     }
 
     private fun formTaskInfo(it: List<Token>) = TaskInfo(it.first().value, it.tail().map { it.value })
