@@ -26,7 +26,7 @@ public class Application {
 
     public static void main(String[] args) throws IOException {
         InterpreterParser interpreterParser = new InterpreterParser(Tokenizer.INSTANCE, TaskInfoParser.INSTANCE, StringInterpolator.INSTANCE);
-        TasksRegistry taskRegistry = new TasksRegistry(new Echo(), namedTasks);
+        TasksRegistry taskRegistry = new TasksRegistry(NativeProcess::new, namedTasks);
         Interpreter interpreter = new Interpreter(Paths.get(""), taskRegistry, interpreterParser);
 
         interpreter.run(System.in, System.out, System.err);

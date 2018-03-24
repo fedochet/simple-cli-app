@@ -7,7 +7,7 @@ import ru.spbau.cliapp.task.Task
 
 class TasksRegistryTest {
     val defaultTask = mock(Task::class.java)
-    val registry = TasksRegistry(defaultTask)
+    val registry = TasksRegistry({ defaultTask })
 
     @Test
     fun `if no task with such name registry returns default task`() {

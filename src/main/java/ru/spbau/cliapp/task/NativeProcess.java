@@ -13,10 +13,14 @@ public class NativeProcess implements Task {
     private final Path inputFile;
     private final Path outputFile;
 
-    public NativeProcess(String taskName) throws IOException {
+    public NativeProcess(String taskName) {
         this.taskName = taskName;
-        inputFile = Files.createTempFile("native_process_input", ".tmp");
-        outputFile = Files.createTempFile("native_process_input", ".tmp");
+        try {
+            inputFile = Files.createTempFile("native_process_input", ".tmp");
+            outputFile = Files.createTempFile("native_process_input", ".tmp");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot create temporary files for process " + taskName, e);
+        }
     }
 
     @Override
@@ -35,11 +39,10 @@ public class NativeProcess implements Task {
 
         commands.add(taskName);
         commands.addAll(args);
-        Process start = new ProcessBuilder()
-            .command(commands)
+        Process start = new ProcessBuilder(commands)
             .redirectInput(inputFile.toFile())
             .redirectOutput(outputFile.toFile())
-            .directory(context.getWorkingDir().toFile())
+            .directory(context.getWorkingDir().toAbsolutePath().toFile())
             .start();
 
         start.waitFor();
@@ -60,7 +63,7 @@ public class NativeProcess implements Task {
 
     private void writeAllOutputFromOutputFile(OutputStream stdout) throws IOException {
         int read;
-        try (Reader reader = Files.newBufferedReader(inputFile)) {
+        try (Reader reader = Files.newBufferedReader(outputFile)) {
             while ((read = reader.read()) != -1) {
                 stdout.write(read);
             }

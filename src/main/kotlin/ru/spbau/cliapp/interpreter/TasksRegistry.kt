@@ -4,8 +4,10 @@ import ru.spbau.cliapp.task.Task
 
 /**
  * Class for keeping [Task] instances by names along with some default fallback task.
+ *
+ * [defaultTaskCreator] is a function that creates tasks by name.
  */
-class TasksRegistry(val defaultTask: Task, tasks: Map<String, Task> = emptyMap()) {
+class TasksRegistry(val defaultTaskCreator: (String) -> Task, tasks: Map<String, Task> = emptyMap()) {
     val tasks: MutableMap<String, Task> = tasks.toMutableMap()
 
     /**
@@ -16,8 +18,8 @@ class TasksRegistry(val defaultTask: Task, tasks: Map<String, Task> = emptyMap()
     }
 
     /**
-     * Returns task found by this name or default.
+     * Returns task found by this name or created by [defaultTaskCreator].
      */
-    fun getTaskByName(name: String) = tasks.getOrDefault(name, defaultTask)
+    fun getTaskByName(name: String): Task = tasks[name] ?: defaultTaskCreator(name)
 
 }
