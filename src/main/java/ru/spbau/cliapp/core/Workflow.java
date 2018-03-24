@@ -1,7 +1,7 @@
 package ru.spbau.cliapp.core;
 
+import ru.spbau.cliapp.TasksRegistry;
 import ru.spbau.cliapp.task.ShellProcess;
-import ru.spbau.cliapp.task.Task;
 import ru.spbau.cliapp.util.IOUtil;
 
 import java.io.IOException;
@@ -10,14 +10,13 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Workflow {
     private final List<TaskInfo> tasks;
-    private final Map<String, Task> namedTasks;
+    private final TasksRegistry namedTasks;
 
-    public Workflow(Map<String, Task> taskRegistry, List<TaskInfo> tasksToRun) {
+    public Workflow(TasksRegistry taskRegistry, List<TaskInfo> tasksToRun) {
         this.tasks = tasksToRun;
         this.namedTasks = taskRegistry;
     }
@@ -30,7 +29,7 @@ public class Workflow {
     public void execute(Path workingDir, InputStream stdin, OutputStream stdout, OutputStream stderr) throws IOException {
         List<ShellProcess> processes = tasks.stream()
             .map(TaskInfo::getTaskName)
-            .map(namedTasks::get)
+            .map(namedTasks::getTaskByName)
             .map(ShellProcess::createProcess)
             .collect(Collectors.toList());
 

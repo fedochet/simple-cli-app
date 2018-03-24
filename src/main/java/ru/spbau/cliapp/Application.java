@@ -13,23 +13,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Application {
-    private static final Map<String, Task> taskRegistry = new HashMap<>();
+    private static final Map<String, Task> namedTasks = new HashMap<>();
 
     static {
-        taskRegistry.put("cat", new Cat());
-        taskRegistry.put("echo", new Echo());
-        taskRegistry.put("exit", new Exit());
-        taskRegistry.put("pwd", new Pwd());
-        taskRegistry.put("wc", new Wc());
+        namedTasks.put("cat", new Cat());
+        namedTasks.put("echo", new Echo());
+        namedTasks.put("exit", new Exit());
+        namedTasks.put("pwd", new Pwd());
+        namedTasks.put("wc", new Wc());
     }
 
     public static void main(String[] args) throws IOException {
         InterpreterParser interpreterParser = new InterpreterParser(Tokenizer.INSTANCE, TaskInfoParser.INSTANCE, StringInterpolator.INSTANCE);
-        Interpreter interpreter = new Interpreter(
-            Paths.get(""),
-            taskRegistry,
-            interpreterParser
-        );
+        TasksRegistry taskRegistry = new TasksRegistry(new Echo(), namedTasks);
+        Interpreter interpreter = new Interpreter(Paths.get(""), taskRegistry, interpreterParser);
 
         interpreter.run(System.in, System.out, System.err);
     }

@@ -11,7 +11,7 @@ class TasksRegistryTest {
 
     @Test
     fun `if no task with such name registry returns default task`() {
-        assertThat(registry.getTask("name")).isSameAs(defaultTask)
+        assertThat(registry.getTaskByName("name")).isSameAs(defaultTask)
     }
 
     @Test
@@ -19,6 +19,6 @@ class TasksRegistryTest {
         val taskMock = mock(Task::class.java)
         registry.addTask("name", taskMock)
 
-        assertThat(registry.getTask("name")).isSameAs(taskMock)
+        assertThat(registry.getTaskByName("name")).isSameAs(taskMock)
     }
 }

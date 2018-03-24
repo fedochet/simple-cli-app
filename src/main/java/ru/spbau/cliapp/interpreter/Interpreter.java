@@ -1,8 +1,8 @@
 package ru.spbau.cliapp.interpreter;
 
+import ru.spbau.cliapp.TasksRegistry;
 import ru.spbau.cliapp.core.TaskInfo;
 import ru.spbau.cliapp.core.Workflow;
-import ru.spbau.cliapp.task.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,6 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -19,10 +18,10 @@ import java.util.Scanner;
  */
 public class Interpreter {
     private final Path workingDir;
-    private final Map<String, Task> taskRegistry;
+    private final TasksRegistry taskRegistry;
     private final InterpreterParser parser;
 
-    public Interpreter(Path workingDir, Map<String, Task> taskRegistry, InterpreterParser parser) {
+    public Interpreter(Path workingDir, TasksRegistry taskRegistry, InterpreterParser parser) {
         this.workingDir = workingDir;
         this.taskRegistry = taskRegistry;
         this.parser = parser;

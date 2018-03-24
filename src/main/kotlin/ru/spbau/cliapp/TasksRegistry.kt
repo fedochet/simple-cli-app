@@ -18,6 +18,6 @@ class TasksRegistry(val defaultTask: Task, tasks: Map<String, Task> = emptyMap()
     /**
      * Returns task found by this name or default.
      */
-    fun getTask(name: String) = tasks.getOrDefault(name, defaultTask)
+    fun getTaskByName(name: String) = tasks.getOrDefault(name, defaultTask)
 
 }
