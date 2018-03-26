@@ -14,7 +14,7 @@ import static org.junit.Assume.assumeTrue;
 
 class NativeProcessTest {
     @Test
-    void name() {
+    void test_unix_cat_is_working() {
         assumeTrue(PlatformUtil.isUnix());
 
         ByteArrayInputStream input = new ByteArrayInputStream("hello world".getBytes());
