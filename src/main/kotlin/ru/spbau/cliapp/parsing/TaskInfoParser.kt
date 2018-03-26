@@ -34,22 +34,22 @@ object TaskInfoParser {
         throw IllegalArgumentException("Two pipes are standing together!")
     }
 
-    private fun formTaskInfo(it: List<Token>) = TaskInfo(it.first().value, it.tail().map { it.value })
-
-    private fun <T> List<T>.splitOn(condition: (T) -> Boolean): List<List<T>> {
-        val result = mutableListOf<MutableList<T>>()
-        result.add(mutableListOf())
-
-        this.forEach {
-            when {
-                condition(it) -> result.add(mutableListOf())
-                else -> result.last().add(it)
-            }
-        }
-
-        return result
-    }
-
-    private fun <T> List<T>.tail() = drop(1)
+    private fun formTaskInfo(tokens: List<Token>) = TaskInfo(tokens.first().value, tokens.tail().map { it.value })
 
 }
+
+private fun <T> List<T>.splitOn(condition: (T) -> Boolean): List<List<T>> {
+    val result = mutableListOf<MutableList<T>>()
+    result.add(mutableListOf())
+
+    this.forEach {
+        when {
+            condition(it) -> result.add(mutableListOf())
+            else -> result.last().add(it)
+        }
+    }
+
+    return result
+}
+
+private fun <T> List<T>.tail() = drop(1)

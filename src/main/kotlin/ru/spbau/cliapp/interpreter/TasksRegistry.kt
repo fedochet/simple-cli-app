@@ -7,8 +7,8 @@ import ru.spbau.cliapp.task.Task
  *
  * [defaultTaskCreator] is a function that creates tasks by name.
  */
-class TasksRegistry(val defaultTaskCreator: (String) -> Task, tasks: Map<String, Task> = emptyMap()) {
-    val tasks: MutableMap<String, Task> = tasks.toMutableMap()
+class TasksRegistry(private val defaultTaskCreator: (String) -> Task, tasks: Map<String, Task> = emptyMap()) {
+    private val tasks: MutableMap<String, Task> = tasks.toMutableMap()
 
     /**
      * Adds task by this name into the registry, replaces existing.
