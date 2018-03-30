@@ -44,12 +44,11 @@ public class Wc implements Task {
 
     private WcResult getCounts(InputStream stdin) throws IOException {
         ByteArrayOutputStream bytesBuffer = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
         WcResult result = new WcResult();
 
-        int size;
-        while ((size = stdin.read(buffer)) != -1) {
-            bytesBuffer.write(buffer, 0, size);
+        int lastByte;
+        while ((lastByte = stdin.read()) != -1) {
+            bytesBuffer.write(lastByte);
         }
 
         String wholeString = bytesBuffer.toString();
