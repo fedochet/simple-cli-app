@@ -4,16 +4,17 @@ package ru.spbau.cliapp.interpreter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import ru.spbau.cliapp.core.TaskInfo
-import ru.spbau.cliapp.parsing.StringInterpolator
-import ru.spbau.cliapp.parsing.TaskInfoParser
-import ru.spbau.cliapp.parsing.Tokenizer
+import ru.spbau.cliapp.core.TasksPipeline
+import ru.spbau.cliapp.core.VarAssignmentInfo
 
 class InterpreterParserTest {
-    val parser = InterpreterParser(Tokenizer, TaskInfoParser, StringInterpolator)
+    val parser = InterpreterParser
 
     @Test
     fun `simple parsing example`() {
-        assertThat(parser.parse("echo hello world | cat | wc", emptyMap()))
+        val parsed = parser.parse("echo hello world | cat | wc", emptyMap()) as TasksPipeline
+
+        assertThat(parsed.tasks)
                 .containsExactly(
                         TaskInfo("echo", listOf("hello", "world")),
                         TaskInfo("cat"),
@@ -23,7 +24,9 @@ class InterpreterParserTest {
 
     @Test
     fun `complex parsing exapmple`() {
-        assertThat(parser.parse("echo \$x | \$wc", mapOf("x" to "hello | cat", "wc" to "less -f")))
+        val parsed = parser.parse("echo \$x | \$wc", mapOf("x" to "hello | cat", "wc" to "less -f")) as TasksPipeline
+
+        assertThat(parsed.tasks)
                 .containsExactly(
                         TaskInfo("echo", listOf("hello")),
                         TaskInfo("cat"),
@@ -33,19 +36,39 @@ class InterpreterParserTest {
 
     @Test
     fun `expansion is performed in double qouted strings`() {
-        assertThat(parser.parse("echo \"\$hello\"", mapOf("hello" to "world")))
+        val parsed = parser.parse("echo \"\$hello\"", mapOf("hello" to "world")) as TasksPipeline
+
+        assertThat(parsed.tasks)
                 .containsExactly(TaskInfo("echo", listOf("world")))
     }
 
     @Test
     fun `no expansion performed in single quoted strings`() {
-        assertThat(parser.parse("echo '\$hello'", mapOf("hello" to "world")))
+        val parsed = parser.parse("echo '\$hello'", mapOf("hello" to "world")) as TasksPipeline
+
+        assertThat(parsed.tasks)
                 .containsExactly(TaskInfo("echo", listOf("\$hello")))
     }
 
     @Test
     fun `double quoted string is not splitted after expansion`() {
-        assertThat(parser.parse("echo \"one \$hello world\"", mapOf("hello" to "world")))
+        val parsed = parser.parse("echo \"one \$hello world\"", mapOf("hello" to "world")) as TasksPipeline
+
+        assertThat(parsed.tasks)
                 .containsExactly(TaskInfo("echo", listOf("one world world")))
+    }
+
+    @Test
+    fun `variable assignment is parsed correctly`() {
+        val parsed = parser.parse("varName = hello", emptyMap()) as VarAssignmentInfo
+
+        assertThat(parsed).isEqualTo(VarAssignmentInfo("varName", "hello"))
+    }
+
+    @Test
+    fun `expansion is performed in variable assignment`() {
+        val parser = parser.parse("varName=\$x", mapOf("x" to "value")) as VarAssignmentInfo
+
+        assertThat(parser).isEqualTo(VarAssignmentInfo("varName", "value"))
     }
 }

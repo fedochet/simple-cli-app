@@ -1,5 +1,7 @@
 package ru.spbau.cliapp.interpreter
 
+import ru.spbau.cliapp.core.TasksPipeline
+import ru.spbau.cliapp.core.VarAssignmentInfo
 import ru.spbau.cliapp.core.Workflow
 import java.io.IOException
 import java.io.InputStream
@@ -16,9 +18,13 @@ class Interpreter(
         private val taskRegistry: TasksRegistry,
         private val parser: InterpreterParser) {
 
+    private val environment = mutableMapOf<String, String>()
+
     /**
      * Starts interpreter and binds it to passed streams. It will stop when EOL will be entered directly into
      * stdin.
+     *
+     * Does not close any of passed streams.
      *
      * @param `input` stdin for shell
      * @param output stdout for shell
@@ -34,10 +40,18 @@ class Interpreter(
         while (scanner.hasNextLine()) {
             val command = scanner.nextLine()
 
-            val tasks = parser.parse(command, emptyMap())
-            Workflow(taskRegistry, tasks).execute(workingDir, input, output, err)
+            val parsedResult = parser.parse(command, environment)
+            when (parsedResult) {
+                is TasksPipeline -> executePipeline(parsedResult, input, output, err)
+                is VarAssignmentInfo -> environment[parsedResult.varName] = parsedResult.value
+            }
+
             printPreface(w)
         }
+    }
+
+    private fun executePipeline(pipeline: TasksPipeline, input: InputStream, output: OutputStream, err: OutputStream) {
+        Workflow(taskRegistry, pipeline.tasks).execute(workingDir, input, output, err)
     }
 
     private fun printPreface(w: PrintStream) {
