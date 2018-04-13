@@ -36,4 +36,9 @@ public class BasicProcessContext implements ProcessContext {
     public Path getWorkingDir() {
         return workingDir;
     }
+
+    @Override
+    public void setWorkingDir(Path workingDir) {
+        this.workingDir = workingDir;
+    }
 }

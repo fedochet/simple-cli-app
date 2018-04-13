@@ -12,4 +12,5 @@ public interface ProcessContext {
     OutputStream getStdout();
     OutputStream getErr();
     Path getWorkingDir();
+    void setWorkingDir(Path workingDir);
 }
