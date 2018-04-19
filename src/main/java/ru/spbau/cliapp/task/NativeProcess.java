@@ -39,7 +39,9 @@ public class NativeProcess implements Task {
     private void tryToPrintError(ProcessContext context, IOException e) {
         try {
             context.getErr().write((e.getMessage() + "\n").getBytes());
-        } catch (IOException ignored) {
+        } catch (IOException error) {
+            e.addSuppressed(error);
+            throw new RuntimeException("Unable to write to error stream!", e);
         }
     }
 

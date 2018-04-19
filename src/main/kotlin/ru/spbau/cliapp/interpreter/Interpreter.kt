@@ -22,7 +22,7 @@ class Interpreter(
 
     /**
      * Starts interpreter and binds it to passed streams. It will stop when EOL will be entered directly into
-     * stdin.
+     * stdin, or any task throws [ru.spbau.cliapp.core.StopInterpreterException].
      *
      * Does not close any of passed streams.
      *
