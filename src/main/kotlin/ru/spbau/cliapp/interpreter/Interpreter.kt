@@ -1,5 +1,6 @@
 package ru.spbau.cliapp.interpreter
 
+import ru.spbau.cliapp.core.StopInterpreterException
 import ru.spbau.cliapp.core.TasksPipeline
 import ru.spbau.cliapp.core.VarAssignmentInfo
 import ru.spbau.cliapp.core.Workflow
@@ -45,6 +46,9 @@ class Interpreter(
                 handleCommand(command, input, output, err)
             } catch (e: ParsingException) {
                 w.println("Error: ${e.message}")
+            } catch (e: StopInterpreterException) {
+                w.println("Exiting shell.")
+                return
             }
 
             printPreface(w)
