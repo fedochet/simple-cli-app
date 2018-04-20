@@ -18,5 +18,3 @@ Class `Interpreter` should control all parts of the application.
     * internally `Workflow` creates new instances of `ShellProcess` and connects them with piped streams
     * on `execute` it invokes them sequentially, one after another 
 * pass required streams into it's `execute` method
-
-No substitution implemented yet.
