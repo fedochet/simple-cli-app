@@ -3,6 +3,7 @@ package ru.spbau.cliapp.interpreter
 import ru.spbau.cliapp.core.TasksPipeline
 import ru.spbau.cliapp.core.VarAssignmentInfo
 import ru.spbau.cliapp.core.Workflow
+import ru.spbau.cliapp.parsing.ParsingException
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -40,13 +41,21 @@ class Interpreter(
         while (scanner.hasNextLine()) {
             val command = scanner.nextLine()
 
-            val parsedResult = parser.parse(command, environment)
-            when (parsedResult) {
-                is TasksPipeline -> executePipeline(parsedResult, input, output, err)
-                is VarAssignmentInfo -> environment[parsedResult.varName] = parsedResult.value
+            try {
+                handleCommand(command, input, output, err)
+            } catch (e: ParsingException) {
+                w.println("Error: ${e.message}")
             }
 
             printPreface(w)
+        }
+    }
+
+    private fun handleCommand(command: String, input: InputStream, output: OutputStream, err: OutputStream) {
+        val parsedResult = parser.parse(command, environment)
+        when (parsedResult) {
+            is TasksPipeline -> executePipeline(parsedResult, input, output, err)
+            is VarAssignmentInfo -> environment[parsedResult.varName] = parsedResult.value
         }
     }
 

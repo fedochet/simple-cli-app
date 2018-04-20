@@ -16,7 +16,7 @@ object TaskInfoParser {
     /**
      * Takes list of tokens, groups them by pipe symbols (`|`) and then transforms them into TaskInfos.
      *
-     * @throws IllegalArgumentException if there are two pipe symbols standing together (like in `"hello | | there"`)
+     * @throws ParsingException if there are two pipe symbols standing together (like in `"hello | | there"`)
      */
     fun parse(tokens: List<Token>): List<TaskInfo> {
         if (tokens.isEmpty()) return emptyList()
@@ -31,7 +31,7 @@ object TaskInfoParser {
             return splittedByPipes
         }
 
-        throw IllegalArgumentException("Two pipes are standing together!")
+        throw ParsingException("Two pipes are standing together!")
     }
 
     private fun formTaskInfo(tokens: List<Token>) = TaskInfo(tokens.first().value, tokens.tail().map { it.value })

@@ -51,7 +51,7 @@ class TaskInfoParserTest {
 
     @Test
     fun `parser throws exception on two pipes in the row`() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows<ParsingException> {
             parser.parse(listOf(VerticalBar, VerticalBar))
         }
     }
