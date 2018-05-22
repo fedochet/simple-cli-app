@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 
+/**
+ * This is a simple implementation of {@link ProcessContext} interface, which just holds all the resources.
+ */
 public class BasicProcessContext implements ProcessContext {
     private Path workingDir;
     private InputStream stdin;
