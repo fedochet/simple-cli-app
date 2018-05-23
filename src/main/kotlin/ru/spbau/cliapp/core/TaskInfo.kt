@@ -13,7 +13,6 @@ sealed class InterpreterTask
 data class VarAssignmentInfo(val varName: String, val value: String) : InterpreterTask()
 data class TasksPipeline(val tasks: List<TaskInfo>) : InterpreterTask()
 
-
 /**
  * This class represents executable name and its arguments.
  */
