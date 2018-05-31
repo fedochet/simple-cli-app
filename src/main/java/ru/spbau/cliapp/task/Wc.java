@@ -1,5 +1,6 @@
 package ru.spbau.cliapp.task;
 
+import org.jetbrains.annotations.NotNull;
 import ru.spbau.cliapp.core.ERROR;
 import ru.spbau.cliapp.core.ProcessContext;
 import ru.spbau.cliapp.core.SUCCESS;
@@ -18,7 +19,8 @@ import java.util.List;
 public class Wc implements Task {
 
     @Override
-    public TaskStatus main(ProcessContext context, List<String> args) {
+    @NotNull
+    public TaskStatus main(@NotNull ProcessContext context, @NotNull List<String> args) {
         if (args.isEmpty()) {
             try {
                 printlnWcResult(context.getStdout(), getCounts(context.getStdin()));

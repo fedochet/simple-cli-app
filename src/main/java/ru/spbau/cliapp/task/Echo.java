@@ -1,5 +1,6 @@
 package ru.spbau.cliapp.task;
 
+import org.jetbrains.annotations.NotNull;
 import ru.spbau.cliapp.core.ERROR;
 import ru.spbau.cliapp.core.ProcessContext;
 import ru.spbau.cliapp.core.SUCCESS;
@@ -12,7 +13,8 @@ import java.util.stream.Collectors;
 public class Echo implements Task {
 
     @Override
-    public TaskStatus main(ProcessContext context, List<String> args) {
+    @NotNull
+    public TaskStatus main(@NotNull ProcessContext context, @NotNull List<String> args) {
         try {
             String result = args.stream().collect(Collectors.joining(" ")).concat("\n");
             context.getStdout().write(result.getBytes());
