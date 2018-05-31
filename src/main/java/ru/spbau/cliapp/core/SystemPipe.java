@@ -7,11 +7,12 @@ import java.io.*;
  */
 public class SystemPipe implements Pipe {
 
+    private static final int DEFAULT_BUFFER_SIZE = 16 * 1024; // 16 KB
     private final PipedInputStream input;
     private final PipedOutputStream output;
 
     public SystemPipe() throws IOException {
-        input = new PipedInputStream();
+        input = new PipedInputStream(DEFAULT_BUFFER_SIZE);
         output = new PipedOutputStream(input);
     }
 
