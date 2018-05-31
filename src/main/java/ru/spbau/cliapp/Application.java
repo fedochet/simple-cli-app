@@ -3,10 +3,8 @@ package ru.spbau.cliapp;
 import ru.spbau.cliapp.interpreter.Interpreter;
 import ru.spbau.cliapp.interpreter.InterpreterParser;
 import ru.spbau.cliapp.interpreter.TasksRegistry;
-import ru.spbau.cliapp.parsing.StringInterpolator;
-import ru.spbau.cliapp.parsing.TaskInfoParser;
-import ru.spbau.cliapp.parsing.Tokenizer;
 import ru.spbau.cliapp.task.*;
+import ru.spbau.cliapp.task.grep.GrepTask;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -22,6 +20,7 @@ public class Application {
         namedTasks.put("exit", new Exit());
         namedTasks.put("pwd", new Pwd());
         namedTasks.put("wc", new Wc());
+        namedTasks.put("grep", new GrepTask());
     }
 
     public static void main(String[] args) throws IOException {
