@@ -1,7 +1,6 @@
 package ru.spbau.cliapp.core;
 
 import ru.spbau.cliapp.interpreter.TasksRegistry;
-import ru.spbau.cliapp.task.ShellProcess;
 import ru.spbau.cliapp.util.IOUtil;
 
 import java.io.IOException;
@@ -35,13 +34,14 @@ public class Workflow {
      *
      * Does not close any of the passed streams.
      *
+     * @return TaskStatus of the last executed task.
      * @throws IOException if anything wrong happens during execution.
      */
-    public void execute(Path workingDir, InputStream stdin, OutputStream stdout, OutputStream stderr) throws IOException {
+    public TaskStatus execute(Path workingDir, InputStream stdin, OutputStream stdout, OutputStream stderr) throws IOException {
         List<ShellProcess> processes = tasks.stream()
             .map(TaskInfo::getTaskName)
             .map(namedTasks::getTaskByName)
-            .map(ShellProcess::createProcess)
+            .map(ShellProcess::new)
             .collect(Collectors.toList());
 
         List<Pipe> pipes = new ArrayList<>();
@@ -59,13 +59,17 @@ public class Workflow {
             Stream.of(IOUtil.ignoringClose(stdout))
         ).collect(Collectors.toList());
 
+        TaskStatus pipelineExecutionStatus = SUCCESS.INSTANCE;
+
         for (int i = 0; i < processes.size(); i++) {
             ShellProcess process = processes.get(i);
             TaskInfo task = tasks.get(i);
             InputStream currentIn = inputStreams.get(i);
             OutputStream currentOut = outputStreams.get(i);
             ProcessContext context = new BasicProcessContext(workingDir, currentIn, currentOut, stderr);
-            process.execute(context, task.getArguments());
+            pipelineExecutionStatus = process.execute(context, task.getArguments());
         }
+
+        return pipelineExecutionStatus;
     }
 }

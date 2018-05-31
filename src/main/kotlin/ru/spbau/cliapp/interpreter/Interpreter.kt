@@ -1,10 +1,6 @@
 package ru.spbau.cliapp.interpreter
 
-import ru.spbau.cliapp.core.StopInterpreterException
-import ru.spbau.cliapp.core.TasksPipeline
-import ru.spbau.cliapp.core.VarAssignmentInfo
-import ru.spbau.cliapp.core.Workflow
-import ru.spbau.cliapp.parsing.ParsingException
+import ru.spbau.cliapp.core.*
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -19,6 +15,7 @@ class Interpreter(
         private val workingDir: Path,
         private val taskRegistry: TasksRegistry,
         private val parser: InterpreterParser) {
+
 
     private val environment = mutableMapOf<String, String>()
 
@@ -36,38 +33,43 @@ class Interpreter(
     @Throws(IOException::class)
     fun run(input: InputStream, output: OutputStream, err: OutputStream) {
         val scanner = Scanner(input)
-        val w = PrintStream(output)
+        val writer = PrintStream(output)
 
-        printPreface(w)
+        printPreface(writer)
         while (scanner.hasNextLine()) {
             val command = scanner.nextLine()
 
-            try {
-                handleCommand(command, input, output, err)
-            } catch (e: ParsingException) {
-                w.println("Error: ${e.message}")
-            } catch (e: StopInterpreterException) {
-                w.println("Exiting shell.")
-                return
+            val taskStatus = handleCommand(command, input, output, err)
+            when (taskStatus) {
+                is ERROR -> writer.println("Error during execution: ${taskStatus.msg}")
+                EXIT -> {
+                    writer.println("Exiting cli.")
+                    return
+                }
             }
 
-            printPreface(w)
+            printPreface(writer)
         }
     }
 
-    private fun handleCommand(command: String, input: InputStream, output: OutputStream, err: OutputStream) {
+    private fun handleCommand(command: String, input: InputStream, output: OutputStream, err: OutputStream): TaskStatus {
         val parsedResult = parser.parse(command, environment)
-        when (parsedResult) {
+        return when (parsedResult) {
+
             is TasksPipeline -> executePipeline(parsedResult, input, output, err)
-            is VarAssignmentInfo -> environment[parsedResult.varName] = parsedResult.value
+
+            is VarAssignmentInfo -> {
+                environment[parsedResult.varName] = parsedResult.value
+                SUCCESS
+            }
         }
     }
 
-    private fun executePipeline(pipeline: TasksPipeline, input: InputStream, output: OutputStream, err: OutputStream) {
-        Workflow(taskRegistry, pipeline.tasks).execute(workingDir, input, output, err)
+    private fun executePipeline(pipeline: TasksPipeline, input: InputStream, output: OutputStream, err: OutputStream): TaskStatus {
+        return Workflow(taskRegistry, pipeline.tasks).execute(workingDir, input, output, err)
     }
 
     private fun printPreface(w: PrintStream) {
-        w.print(workingDir.toAbsolutePath().toString() + "> ")
+        w.print("${workingDir.toAbsolutePath()}> ")
     }
 }
