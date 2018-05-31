@@ -1,6 +1,9 @@
 package ru.spbau.cliapp.task;
 
+import ru.spbau.cliapp.core.ERROR;
 import ru.spbau.cliapp.core.ProcessContext;
+import ru.spbau.cliapp.core.SUCCESS;
+import ru.spbau.cliapp.core.TaskStatus;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +13,7 @@ import java.util.List;
 public class Cat implements Task {
 
     @Override
-    public int main(ProcessContext context, List<String> args) {
+    public TaskStatus main(ProcessContext context, List<String> args) {
         if (args.isEmpty()) {
             return printFromStdout(context);
         } else {
@@ -19,8 +22,8 @@ public class Cat implements Task {
 
     }
 
-    private int printFiles(ProcessContext context, List<String> args) {
-        int errorCode = 0;
+    private TaskStatus printFiles(ProcessContext context, List<String> args) {
+        TaskStatus errorCode = SUCCESS.INSTANCE;
         for (String fileName : args) {
             try {
                 Path path = context.getWorkingDir().resolve(fileName);
@@ -28,7 +31,7 @@ public class Cat implements Task {
                 context.getStdout().write(bytes);
                 context.getStdout().write("\n".getBytes());
             } catch (IOException e) {
-                errorCode = 1;
+                errorCode = new ERROR(e);
                 try {
                     context.getErr().write(("Error priniting file " + fileName + "\n").getBytes());
                 } catch (IOException ignored) {
@@ -39,16 +42,16 @@ public class Cat implements Task {
         return errorCode;
     }
 
-    private int printFromStdout(ProcessContext context) {
+    private TaskStatus printFromStdout(ProcessContext context) {
         int readByte;
         try {
             while ((readByte = context.getStdin().read()) != -1) {
                 context.getStdout().write(readByte);
             }
         } catch (IOException e) {
-            return 1;
+            return new ERROR(e);
         }
 
-        return 0;
+        return SUCCESS.INSTANCE;
     }
 }

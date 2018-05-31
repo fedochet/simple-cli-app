@@ -1,6 +1,7 @@
 package ru.spbau.cliapp.task;
 
 import ru.spbau.cliapp.core.ProcessContext;
+import ru.spbau.cliapp.core.TaskStatus;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,10 +19,10 @@ final public class ShellProcess {
     /**
      * @param context is a execution context which is passed to task.
      * @param args are string arguments fot task's main method.
-     * @return exit code from the task.
+     * @return status of the executed task.
      */
-    public int execute(ProcessContext context, List<String> args) {
-        int exitCode = task.main(context, args);
+    public TaskStatus execute(ProcessContext context, List<String> args) {
+        TaskStatus exitCode = task.main(context, args);
         try {
             context.getStdout().close();
         } catch (IOException e) {

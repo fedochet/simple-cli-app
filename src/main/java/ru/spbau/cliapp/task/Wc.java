@@ -1,6 +1,9 @@
 package ru.spbau.cliapp.task;
 
+import ru.spbau.cliapp.core.ERROR;
 import ru.spbau.cliapp.core.ProcessContext;
+import ru.spbau.cliapp.core.SUCCESS;
+import ru.spbau.cliapp.core.TaskStatus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,12 +18,12 @@ import java.util.List;
 public class Wc implements Task {
 
     @Override
-    public int main(ProcessContext context, List<String> args) {
+    public TaskStatus main(ProcessContext context, List<String> args) {
         if (args.isEmpty()) {
             try {
                 printlnWcResult(context.getStdout(), getCounts(context.getStdin()));
             } catch (IOException e) {
-                return 1;
+                return new ERROR(e);
             }
         } else {
             for (String fileName : args) {
@@ -34,7 +37,7 @@ public class Wc implements Task {
             }
         }
 
-        return 0;
+        return SUCCESS.INSTANCE;
 
     }
 
