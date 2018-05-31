@@ -32,7 +32,7 @@ public class NativeProcess implements Task {
     private TaskStatus executeNativeProcess(ProcessContext context, List<String> args) throws IOException {
         DefaultExecutor defaultExecutor = new DefaultExecutor();
 
-        CommandLine commandLine = new CommandLine(taskName).addArguments(args.toArray(new String[args.size()]));
+        CommandLine commandLine = new CommandLine(taskName).addArguments(args.toArray(new String[0]));
         defaultExecutor.setStreamHandler(new PumpStreamHandler(context.getStdout(), context.getErr(), context.getStdin()));
         defaultExecutor.execute(commandLine);
 

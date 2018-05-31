@@ -1,9 +1,7 @@
 package ru.spbau.cliapp.task;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.spbau.cliapp.core.EXIT;
-import ru.spbau.cliapp.core.StopInterpreterException;
 
 import static org.assertj.core.api.Assertions.*;
 

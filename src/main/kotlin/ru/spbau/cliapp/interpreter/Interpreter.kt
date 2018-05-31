@@ -21,7 +21,7 @@ class Interpreter(
 
     /**
      * Starts interpreter and binds it to passed streams. It will stop when EOL will be entered directly into
-     * stdin, or any task throws [ru.spbau.cliapp.core.StopInterpreterException].
+     * stdin, or any workflow returns [EXIT] status.
      *
      * Does not close any of passed streams.
      *
