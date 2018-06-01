@@ -11,6 +11,13 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
+/**
+ * This task emulates unix util `grep`.
+ *
+ * Usage: `grep options... pattern files...`
+ *
+ * See options described in class [GrepParams].
+ */
 class GrepTask : Task {
     override fun main(context: ProcessContext, args: List<String>): TaskStatus {
         try {

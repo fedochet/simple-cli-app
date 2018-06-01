@@ -4,7 +4,9 @@ import picocli.CommandLine
 import picocli.CommandLine.Option
 import java.util.*
 
-
+/**
+ * This class represents options for [GrepTask].
+ */
 class GrepParams {
     @Option(
             names = ["-i", "--ignore-case"],
@@ -33,5 +35,4 @@ class GrepParams {
     override fun toString(): String {
         return "GrepParams(ignoreCase=$ignoreCase, wordRegexp=$wordRegexp, afterContext=$afterContext, pattern='$pattern', fileNames=${Arrays.toString(fileNames)})"
     }
-
 }
