@@ -3,6 +3,7 @@ package ru.spbau.cliapp.task;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.jetbrains.annotations.NotNull;
 import ru.spbau.cliapp.core.ERROR;
 import ru.spbau.cliapp.core.ProcessContext;
 import ru.spbau.cliapp.core.SUCCESS;
@@ -28,7 +29,8 @@ public class NativeProcess implements Task {
     }
 
     @Override
-    public TaskStatus main(ProcessContext context, List<String> args) {
+    @NotNull
+    public TaskStatus main(@NotNull ProcessContext context, @NotNull List<String> args) {
         try {
             return executeNativeProcess(context, args);
         } catch (IOException e) {
