@@ -2,7 +2,6 @@ package ru.spbau.cliapp.task;
 
 import ru.spbau.cliapp.core.ProcessContext;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,30 +10,32 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Ls implements Task {
+/**Меняет текущую директорию*/
+public class Cd implements Task {
     @Override
     public int main(ProcessContext context, List<String> args) {
-        String str;
         if (args.isEmpty()) {
-            str = context.getWorkingDir().toString();
+            Path path = Paths.get(System.getProperty("user.dir"));
+            context.setWorkingDir(path);
         } else {
-            str = args.get(0);
-        }
-        File folder = new File(str);
-        File[] ls = folder.listFiles();
-        for (File file : ls) {
-            try {
-                context.getStdout().write((file.getName() + '\n').getBytes());
-            } catch (IOException e) {
-                return 1;
-            }
-        }
+            Path path = Paths.get(args.get(0));
+            if (Files.exists(path)) {
+                context.setWorkingDir(path);
+            } else {
+                Path tmp = Paths.get(context.getWorkingDir().getFileName() + args.get(0));
+                if (Files.exists(tmp)) {
+                    context.setWorkingDir(tmp);
+                } else {
+                    try {
+                        context.getStdout().write(("cd: " + args.get(0) + ": No such file directory" + "\n").getBytes());
+                    } catch (IOException e) {
+                        return 1;
+                    }
+                }
 
-//        try {
-//            context.getStdout().write((context.getWorkingDir().toAbsolutePath().toString() + "\n").getBytes());
-//        } catch (IOException e) {
-//            return 1;
-//        }
+            }
+
+        }
 
         return 0;
     }
