@@ -6,7 +6,6 @@ import ru.spbau.cliapp.core.ProcessContext
 import ru.spbau.cliapp.core.SUCCESS
 import ru.spbau.cliapp.core.TaskStatus
 import ru.spbau.cliapp.task.Task
-import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -44,7 +43,7 @@ class GrepTask : Task {
     }
 
     private fun executeGrep(inputStream: InputStream, outputStream: OutputStream, grepParams: GrepParams): TaskStatus {
-        val pattern = grepParams.pattern.toRegexWithParams(grepParams.ignoreCase)
+        val worker = GrepWorker(grepParams.pattern, grepParams.ignoreCase, grepParams.wordRegexp)
         val contextSize = grepParams.afterContext ?: 0
 
         val bufferedReader = inputStream.bufferedReader()
@@ -53,11 +52,7 @@ class GrepTask : Task {
         while (true) {
             val line = bufferedReader.readLine() ?: break
 
-            val wordsRanges = findWordRanges(line)
-
-            val matches = pattern.findAll(line)
-                    .filter { !grepParams.wordRegexp || it.range in wordsRanges }
-                    .toList()
+            val matches = worker.findMatches(line)
 
             if (matches.isNotEmpty()) {
                 val fixedLine = matches.replace(line, { it.value.ansiColored(Color.RED_BOLD) })
@@ -71,23 +66,9 @@ class GrepTask : Task {
 
         return SUCCESS
     }
-
-    companion object {
-        private val wordRegex = Regex("\\w+")
-
-        private fun findWordRanges(line: String) = wordRegex.findAll(line).map { it.range }.toSet()
-    }
-}
-
-private fun List<MatchResult>.replace(s: String, operator: (MatchResult) -> String): String {
-    return this.foldRight(s, { match, acc -> acc.replaceRange(match.range, operator(match)) })
 }
 
 private fun OutputStream.println(s: String?) {
     this.write("${s ?: ""}\n".toByteArray())
     this.flush()
-}
-
-private fun String.toRegexWithParams(ignoreCase: Boolean): Regex {
-    return if (ignoreCase) this.toRegex(RegexOption.IGNORE_CASE) else this.toRegex()
 }
