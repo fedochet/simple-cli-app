@@ -1,13 +1,15 @@
 package ru.spbau.cliapp.task;
 
-import org.junit.Test;
-import ru.spbau.cliapp.core.StopInterpreterException;
+import org.junit.jupiter.api.Test;
+import ru.spbau.cliapp.core.EXIT;
 
-public class ExitTest {
+import static org.assertj.core.api.Assertions.*;
 
-    @Test(expected = StopInterpreterException.class)
-    public void exit_command_throws_StopInterpreterException() {
+class ExitTest {
+
+    @Test
+    void exit_command_throws_StopInterpreterException() {
         Exit exit = new Exit();
-        exit.main(null, null, null);
+        assertThat(exit.main(null, null)).isEqualTo(EXIT.INSTANCE);
     }
 }
