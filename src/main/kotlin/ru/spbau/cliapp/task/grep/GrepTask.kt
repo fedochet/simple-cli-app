@@ -6,6 +6,9 @@ import ru.spbau.cliapp.core.ProcessContext
 import ru.spbau.cliapp.core.SUCCESS
 import ru.spbau.cliapp.core.TaskStatus
 import ru.spbau.cliapp.task.Task
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
 import java.io.OutputStream
 
 class GrepTask : Task {
@@ -14,7 +17,15 @@ class GrepTask : Task {
             val grepParams = CommandLine.populateCommand(GrepParams(), *args.toTypedArray())
 
             if (grepParams.fileNames.isEmpty()) {
-                return executeGrepOnStdin(context, grepParams)
+                return executeGrep(context.stdin, context.stdout, grepParams)
+            } else {
+                grepParams.fileNames.forEach { filename ->
+                    try {
+                        FileInputStream(filename).use { executeGrep(it, context.stdout, grepParams) }
+                    } catch (e: IOException) {
+                        context.err.println("Error: ${e.message}")
+                    }
+                }
             }
 
             return SUCCESS
@@ -24,11 +35,11 @@ class GrepTask : Task {
         }
     }
 
-    private fun executeGrepOnStdin(context: ProcessContext, grepParams: GrepParams): TaskStatus {
+    private fun executeGrep(inputStream: InputStream, outputStream: OutputStream, grepParams: GrepParams): TaskStatus {
         val pattern = grepParams.pattern.toRegexWithParams(grepParams.ignoreCase)
         val contextSize = grepParams.afterContext ?: 0
 
-        val bufferedReader = context.stdin.bufferedReader()
+        val bufferedReader = inputStream.bufferedReader()
 
         var contextToPrint = 0
         while (true) {
@@ -42,10 +53,10 @@ class GrepTask : Task {
 
             if (matches.isNotEmpty()) {
                 val fixedLine = matches.replace(line, { it.value.ansiColored(Color.RED_BOLD) })
-                context.stdout.println(fixedLine)
+                outputStream.println(fixedLine)
                 contextToPrint = contextSize
             } else if (contextToPrint > 0) {
-                context.stdout.println(line)
+                outputStream.println(line)
                 contextToPrint -= 1
             }
         }
