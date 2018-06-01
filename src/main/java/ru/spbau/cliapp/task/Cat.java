@@ -11,6 +11,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * This task emulates unix util `cat' - it concatenates files and print on the standard output.
+ *
+ * With no FILE, reads standard input.
+ */
 public class Cat implements Task {
 
     @Override

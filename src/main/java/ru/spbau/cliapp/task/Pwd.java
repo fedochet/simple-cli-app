@@ -9,6 +9,9 @@ import ru.spbau.cliapp.core.TaskStatus;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This task emulates unix `pwd` util - it prints name of current/working directory.
+ */
 public class Pwd implements Task {
     @Override
     @NotNull

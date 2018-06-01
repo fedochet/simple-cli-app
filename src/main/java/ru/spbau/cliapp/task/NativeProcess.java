@@ -12,10 +12,18 @@ import ru.spbau.cliapp.core.TaskStatus;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This task is a placeholder task which launches actual process by name in the OS.
+ *
+ * It should be used as a last resort when cli failed to find more specific {@link Task} implementation.
+ */
 public class NativeProcess implements Task {
 
     private final String taskName;
 
+    /**
+     * @param taskName is a name of program that should be launched.
+     */
     public NativeProcess(String taskName) {
         this.taskName = taskName;
     }

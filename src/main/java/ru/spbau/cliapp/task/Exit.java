@@ -7,6 +7,11 @@ import ru.spbau.cliapp.core.TaskStatus;
 
 import java.util.List;
 
+/**
+ * This task is a special task that signalises about end of cli session.
+ *
+ * Ideally, It is the only task that should return {@link EXIT} status.
+ */
 public class Exit implements Task {
     @Override
     @NotNull
