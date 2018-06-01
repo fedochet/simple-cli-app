@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This task emulates unix util `echo` - it displays a line of text to stdout.
+ */
 public class Echo implements Task {
 
     @Override

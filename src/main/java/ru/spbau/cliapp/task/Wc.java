@@ -15,6 +15,14 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This task emulates unix `wc` program.
+ *
+ * Print newline, word, and byte counts for each FILE, and a total line if more than one FILE is specified.
+ * A word is a non-zero-length sequence of characters delimited by white space.
+ *
+ * With no FILE, read standard input.
+ */
 public class Wc implements Task {
 
     @Override
