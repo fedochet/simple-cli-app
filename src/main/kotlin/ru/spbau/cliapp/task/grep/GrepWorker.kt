@@ -8,7 +8,7 @@ data class GrepMatch(val value: String, val range: IntRange)
 /**
  * This class does all grep heavy-lifting when it comes to actual parsing.
  */
-class GrepWorker(pattern: String, ignoreCase: Boolean, private val wordRegexp: Boolean) {
+class GrepWorker(pattern: String, ignoreCase: Boolean = false, private val wordRegexp: Boolean = false) {
     private val pattern = pattern.toRegexWithParams(ignoreCase)
 
     /**
