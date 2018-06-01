@@ -7,7 +7,6 @@ import ru.spbau.cliapp.core.SUCCESS
 import ru.spbau.cliapp.core.TaskStatus
 import ru.spbau.cliapp.task.Task
 import java.io.OutputStream
-import java.util.*
 
 class GrepTask : Task {
     override fun main(context: ProcessContext, args: List<String>): TaskStatus {
@@ -26,22 +25,50 @@ class GrepTask : Task {
     }
 
     private fun executeGrepOnStdin(context: ProcessContext, grepParams: GrepParams): TaskStatus {
-        val pattern = grepParams.pattern.toRegex()
+        val pattern = grepParams.pattern.toRegexWithParams(grepParams.ignoreCase)
+        val contextSize = grepParams.afterContext ?: 0
 
-        val bufferedReader = Scanner(context.stdin)
+        val bufferedReader = context.stdin.bufferedReader()
 
-        while (bufferedReader.hasNextLine()) {
-            val line = bufferedReader.nextLine()
-            if (pattern.containsMatchIn(line)) {
-                context.stdout.println(pattern.replace(line, { it.value.ansiColored(Color.RED_BOLD) }))
+        var contextToPrint = 0
+        while (true) {
+            val line = bufferedReader.readLine() ?: break
+
+            val wordsRanges = findWordRanges(line)
+
+            val matches = pattern.findAll(line)
+                    .filter { !grepParams.wordRegexp || it.range in wordsRanges }
+                    .toList()
+
+            if (matches.isNotEmpty()) {
+                val fixedLine = matches.replace(line, { it.value.ansiColored(Color.RED_BOLD) })
+                context.stdout.println(fixedLine)
+                contextToPrint = contextSize
+            } else if (contextToPrint > 0) {
+                context.stdout.println(line)
+                contextToPrint -= 1
             }
         }
 
         return SUCCESS
     }
+
+    companion object {
+        private val wordRegex = Regex("\\w+")
+
+        private fun findWordRanges(line: String) = wordRegex.findAll(line).map { it.range }.toSet()
+    }
+}
+
+private fun List<MatchResult>.replace(s: String, operator: (MatchResult) -> String): String {
+    return this.foldRight(s, { match, acc -> acc.replaceRange(match.range, operator(match)) })
 }
 
 private fun OutputStream.println(s: String?) {
     this.write("${s ?: ""}\n".toByteArray())
     this.flush()
+}
+
+private fun String.toRegexWithParams(ignoreCase: Boolean): Regex {
+    return if (ignoreCase) this.toRegex(RegexOption.IGNORE_CASE) else this.toRegex()
 }
