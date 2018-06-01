@@ -21,7 +21,8 @@ class GrepTask : Task {
             } else {
                 grepParams.fileNames.forEach { filename ->
                     try {
-                        FileInputStream(filename).use { executeGrep(it, context.stdout, grepParams) }
+                        val targetFile = context.workingDir.resolve(filename).toFile()
+                        targetFile.inputStream().use { executeGrep(it, context.stdout, grepParams) }
                     } catch (e: IOException) {
                         context.err.println("Error: ${e.message}")
                     }
